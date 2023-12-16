@@ -9,39 +9,64 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <fieldset disabled>
-                    <div class="row disabled">
-                        <div class="col col-8">
+        <div class="row"><div class="col">
+            <form action="{% url 'snippet_edit' snippet.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ snippet.id }}">
+                <fieldset {% if not can_edit %} disabled {% endif %}>
+                    <div class="row {% if not can_edit %} disabled {% endif %}">
+                        <div class="col col-4">
                             Название: <input type="text" value="{{ snippet.name }}" class="form-control">
                         </div>
                         <div class="col col-4">
-                            Дата создания:<input type="text" value="{{ snippet.creation_date }}" class="form-control">
+                            Язык:
+                            <input type="text" value="{{ snippet.lang }}" class="form-control">
+                        </div>
+                        <div class="col col-4">
+                            Дата создания:
+                            <input type="text" value="{{ snippet.creation_date }}" class="form-control">
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col">
                             <div class="p-2 h-100" style="border:1px solid #ced4da; border-radius:5px;">
+{% if can_edit %}
+                                <textarea cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
+{% else %}
                                 <p>
                                     {{ snippet.code }}
                                 </p>
-
+{% endif %}
                             </div>
-
                         </div>
                     </div>
+                    <hr>
+{% if can_edit %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group row">
+                                <div class="offset-4 col-4">
+                                    <input type="submit" class="btn btn-primary btn-block" value="Сохранить" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{% endif %}
                 </fieldset>
-            </div>
-        </div>
+            </form>
+        </div></div>
 
+        {% if not can_edit %}
         <div class="row">
             <div class="col">
-                <form action="{% url 'snippet_delete' %}" method="post">
-                    {% csrf_token %}
-                    <div class="form-group row">
-                        <div class="offset-8 col-4">
+                <div class="form-group row">
+                    <div class="offset-4 col-4">
+                        <a class="btn btn-primary btn-block" href="{% url 'snippet_edit' snippet.id %}">Редактировать</a>
+                    </div>
+                    <div class="col-2">
+                        <form action="{% url 'snippet_delete' %}" method="post">
+                            {% csrf_token %}
                             <input type="hidden" name="id" value="{{ snippet.id }}">
                             <input type="submit" class="btn btn-danger btn-block" value="Удалить">
                         </div>
@@ -50,5 +75,6 @@
 
             </div>
         </div>
+        {% endif %}
     </div>
 {% endblock %}

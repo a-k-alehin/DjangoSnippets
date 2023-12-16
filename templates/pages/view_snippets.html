@@ -16,6 +16,7 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Название</th>
+                        <th scope="col">Язык</th>
                         <th scope="col">Дата создания</th>
                     </tr>
                     </thead>
@@ -24,6 +25,7 @@
                     <tr>
                         <td scope="row">{{snp.id}}</td>
                         <td><a href="{% url 'snippet_detail' snp.id %}">{{snp.name}}</a></td>
+                        <td>{{snp.lang}}</td>
                         <td>{{snp.creation_date}}</td>
                     </tr>
                     {% endfor %}
