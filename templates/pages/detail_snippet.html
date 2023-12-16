@@ -27,12 +27,27 @@
                                 <p>
                                     {{ snippet.code }}
                                 </p>
-                 
+
                             </div>
-                 
+
                         </div>
                     </div>
                 </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <form action="{% url 'snippet_delete' snippet.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <div class="offset-8 col-4">
+                            <input type="hidden" name="id" value=" snippet.id ">
+                            <input type="submit" class="btn btn-danger btn-block" value="Удалить">
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
