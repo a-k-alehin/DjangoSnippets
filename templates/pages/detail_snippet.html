@@ -16,15 +16,16 @@
                 <fieldset {% if not can_edit %} disabled {% endif %}>
                     <div class="row {% if not can_edit %} disabled {% endif %}">
                         <div class="col col-4">
-                            Название: <input type="text" value="{{ snippet.name }}" class="form-control">
+                            Название:
+                            <input name="name" type="text" value="{{ snippet.name }}" class="form-control">
                         </div>
                         <div class="col col-4">
                             Язык:
-                            <input type="text" value="{{ snippet.lang }}" class="form-control">
+                            <input name="lang" type="text" value="{{ snippet.lang }}" class="form-control">
                         </div>
                         <div class="col col-4">
                             Дата создания:
-                            <input type="text" value="{{ snippet.creation_date }}" class="form-control">
+                            <input type="text" value="{{ snippet.creation_date }}" class="form-control" readonly="readonly">
                         </div>
                     </div>
                     <hr>
@@ -32,11 +33,9 @@
                         <div class="col">
                             <div class="p-2 h-100" style="border:1px solid #ced4da; border-radius:5px;">
 {% if can_edit %}
-                                <textarea cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
+                                <textarea name="code" cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
 {% else %}
-                                <p>
-                                    {{ snippet.code }}
-                                </p>
+                                <pre>{{ snippet.code }}</pre>
 {% endif %}
                             </div>
                         </div>
@@ -57,7 +56,7 @@
             </form>
         </div></div>
 
-        {% if not can_edit %}
+{% if not can_edit %}
         <div class="row">
             <div class="col">
                 <div class="form-group row">
@@ -75,6 +74,6 @@
 
             </div>
         </div>
-        {% endif %}
+{% endif %}
     </div>
 {% endblock %}

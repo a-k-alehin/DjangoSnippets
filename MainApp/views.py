@@ -31,20 +31,19 @@ def snippet_edit_page(request, id):
         snippet = Snippet.objects.get(id=id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound(f'Сниппет с id={id} не найден')
+    context = {"snippet": snippet, "can_edit": True}
     if request.method == "GET":
-        context = {"snippet": snippet, "can_edit": True}
         return render(request, "pages/detail_snippet.html", context)
     if request.method == "POST":
         form = SnippetForm(request.POST)
+        snippet.name=request.POST.get('name',snippet.name)
+        snippet.lang=request.POST.get('lang',snippet.lang)
+        snippet.code=request.POST.get('code',snippet.code)
         if form.is_valid():
-            snippet.update(
-                name=request.POST.get('name',snippet.name),
-                lang=request.POST.get('lang',snippet.lang),
-                code=request.POST.get('code',snippet.code)
-                )
             snippet.save()
             return redirect("snippets_list")
-        return render(request,'pages/detail_snippet.html',{'form': form, 'pagename': 'Надо исправить'})
+        context['pagename'] = 'Надо исправить'
+        return render(request, 'pages/detail_snippet.html', context)
     return HttpResponseNotAllowed("")
 
 
