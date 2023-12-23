@@ -23,13 +23,14 @@ def snippet_detail_page(request, id):
             return HttpResponseNotFound(f'Сниппет с id={id} не найден')
         context = {"snippet": snippet, "can_edit": False}
         return render(request, "pages/detail_snippet.html", context)
-    return HttpResponseNotAllowed()
+    return HttpResponseNotAllowed(('GET',))
 
 
 def snippet_edit_page(request, id):
     try:
         snippet = Snippet.objects.get(id=id)
     except ObjectDoesNotExist:
+        #raise Http404
         return HttpResponseNotFound(f'Сниппет с id={id} не найден')
     context = {"snippet": snippet, "can_edit": True}
     if request.method == "GET":
@@ -44,7 +45,7 @@ def snippet_edit_page(request, id):
             return redirect("snippets_list")
         context['pagename'] = 'Надо исправить'
         return render(request, 'pages/detail_snippet.html', context)
-    return HttpResponseNotAllowed("")
+    return HttpResponseNotAllowed(('GET','POST'))
 
 
 def add_snippet_page(request):
@@ -60,16 +61,16 @@ def add_snippet_page(request):
             form.save()
             return redirect("snippets_list")
         return render(request,'pages/add_snippet.html',{'form': form, 'pagename': 'Надо исправить'})
-    return HttpResponseNotAllowed('')
+    return HttpResponseNotAllowed(('GET','POST'))
 
 
-def snippet_delete(request):
-    if request.method != "POST":
-        return HttpResponseNotAllowed()
+def snippet_delete(request, id):
     try:
-        id=request.POST.get('id','')
+        #id=request.POST.get('id','')
         snippet = Snippet.objects.get(id=id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound(f'Сниппет с id={id} не найден')
+    if request.method != "POST":
+        return render(request, 'pages/del_snippet.html', {'snippet': snippet})
     snippet.delete()
     return redirect('snippets_list')

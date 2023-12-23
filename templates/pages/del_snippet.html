@@ -4,58 +4,52 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>{{ pagename }}</h1>
+                <h1>Удаление</h1>
                 <hr>
             </div>
         </div>
 
         <div class="row"><div class="col">
-            <form action="{% url 'snippet_edit' snippet.id %}" method="post">
+            <form action="{% url 'snippet_delete' snippet.id %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ snippet.id }}">
-                <fieldset {% if not can_edit %} disabled {% endif %}>
-                    <div class="row {% if not can_edit %} disabled {% endif %}">
+                <fieldset>
+                    <div class="row disabled">
                         <div class="col col-4">
                             Название:
-                            <input name="name" type="text" value="{{ snippet.name }}" class="form-control">
+                            {{ snippet.name }}
                         </div>
                         <div class="col col-4">
                             Язык:
-                            <input name="lang" type="text" value="{{ snippet.lang }}" class="form-control">
+                            {{ snippet.lang }}
                         </div>
                         <div class="col col-4">
                             Дата создания:
-                            <input type="text" value="{{ snippet.creation_date }}" class="form-control" readonly="readonly">
+                            {{ snippet.creation_date }}
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col">
                             <div class="p-2 h-100" style="border:1px solid #ced4da; border-radius:5px;">
-{% if can_edit %}
-                                <textarea name="code" cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
-{% else %}
                                 <pre>{{ snippet.code }}</pre>
-{% endif %}
                             </div>
                         </div>
                     </div>
-                </fieldset>
-                <hr>
+                    <hr>
                     <div class="row">
                         <div class="col">
                             <div class="form-group row">
                                 <div class="offset-4 col-4">
-{% if can_edit %}
-                                    <input type="submit" class="btn btn-primary btn-block" value="Сохранить" />
-{% else %}
-                                    <a class="btn btn-primary btn-block" href="{% url 'snippet_edit' snippet.id %}">Редактировать</a>
-{% endif %}
+                                    <input type="submit" class="btn btn-danger btn-block" value="Удалить" />
+                                </div>
+                                <div class="col-4">
+                                    <a href="{% url 'snippets_list' %}" class="btn btn-light btn-block" value="Удалить">Назад</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                </fieldset>
             </form>
         </div></div>
     </div>
