@@ -40,6 +40,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            Публичный:
+                            <input name="is_public" type="checkbox" checked="{% if snippet.is_public %} checked {% endif %}">
+                        </div>
+                    </div>
                 </fieldset>
                 <hr>
                     <div class="row">
@@ -48,7 +54,7 @@
                                 <div class="offset-4 col-4">
 {% if can_edit %}
                                     <input type="submit" class="btn btn-primary btn-block" value="Сохранить" />
-{% else %}
+{% elif snippet.user == request.user %}
                                     <a class="btn btn-primary btn-block" href="{% url 'snippet_edit' snippet.id %}">Редактировать</a>
 {% endif %}
                                 </div>
