@@ -18,5 +18,15 @@
         "code": "print(\"Hello world - 2\")",
         "creation_date": "2023-12-16T11:52:49.073Z"
     }
+},
+{
+    "model": "MainApp.snippet",
+    "pk": 3,
+    "fields": {
+        "name": "123",
+        "lang": "pascal",
+        "code": "1223",
+        "creation_date": "2023-12-16T13:32:42.289Z"
+    }
 }
 ]
