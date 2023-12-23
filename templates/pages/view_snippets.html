@@ -19,6 +19,7 @@
                         <th scope="col">Язык</th>
                         <th scope="col">Дата создания</th>
                         <th scope="col">Публичный</th>
+                        <th scope="col">Пользователь</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -29,7 +30,8 @@
                         <td><a href="{% url 'snippet_detail' snp.id %}">{{snp.name}}</a></td>
                         <td>{{snp.lang}}</td>
                         <td>{{snp.creation_date}}</td>
-                        <td>{{snp.is_public}}</td>
+                        <td>{% if snp.is_public %} Да {% endif %}</td>
+                        <td>{{snp.user.username}}</td>
                         <td>
 {% if snp.user == request.user %}
                             <a class="btn btn-danger" href="{% url 'snippet_delete' snp.id %}">x</a>

@@ -13,11 +13,6 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="form-inline">
-                        <a class="btn btn-outline-secondary" href="{% url 'snippets_add' %}">
-                            Добавить сниппет
-                        </a>
-                    </li>
-                    <li class="form-inline">
                         <a class="btn btn-outline-info" href="{% url 'snippets_list' %}">
                             Посмотреть сниппеты
                         </a>
@@ -26,6 +21,11 @@
                     <li class="form-inline">
                         <a class="btn btn-outline-info" href="{% url 'snippets_list_my' %}">
                             Мои сниппеты
+                        </a>
+                    </li>
+                    <li class="form-inline">
+                        <a class="btn btn-outline-secondary" href="{% url 'snippets_add' %}">
+                            Добавить сниппет
                         </a>
                     </li>
 {% endif %}
@@ -54,6 +54,13 @@
                 </form>
                 <div class="dropdown-divider"></div>
             </div>
+            {% if errors %}
+            <ul>
+                {%for err in errors %}
+                <li style="color: red;">{{ err }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
 {% endif %}
 

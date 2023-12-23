@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from MainApp.models import Snippet
-from MainApp.forms import SnippetForm
+from MainApp.forms import SnippetForm, UserRegistrationForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
@@ -16,9 +16,16 @@ def login(request):
         if user is not None:
             auth.login(request, user)
         else:
-            # Return error message
-            pass
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+            context = {
+                'pagename': 'PythonBin',
+                'errors': ["wrong username or password"]}
+            return render(request, 'pages/index.html', context)
+            #pass
+    to = request.META.get('HTTP_REFERER', '/')
+    if not to.endswith('/login'):
+        return redirect(to)
+    else:
+        return redirect('home')
 
 
 def logout(request):
@@ -27,6 +34,7 @@ def logout(request):
 
 
 def index_page(request):
+    # print(f'vars(request) = ')
     context = {'pagename': 'PythonBin'}
     return render(request, 'pages/index.html', context)
 
@@ -65,18 +73,19 @@ def snippet_edit_page(request, id):
         return render(request, "pages/detail_snippet.html", context)
     if request.method == "POST":
         form = SnippetForm(request.POST)
-        snippet.name=request.POST.get('name',snippet.name)
-        snippet.lang=request.POST.get('lang',snippet.lang)
-        snippet.code=request.POST.get('code',snippet.code)
-        snippet.is_public=request.POST.get('is_public',False)
         if form.is_valid():
+            snippet.name=request.POST.get('name',snippet.name)
+            snippet.lang=request.POST.get('lang',snippet.lang)
+            snippet.code=request.POST.get('code',snippet.code)
+            snippet.is_public=request.POST.get('is_public', False)  #(request.POST.get('is_public',"") == 'on')
             snippet.save()
-            return redirect("snippets_list")
+            return redirect("snippets_list_my")
         context['pagename'] = 'Надо исправить'
         return render(request, 'pages/detail_snippet.html', context)
     return HttpResponseNotAllowed(('GET','POST'))
 
 
+@login_required
 def add_snippet_page(request):
     if request.method == "GET":
         form = SnippetForm()
@@ -91,7 +100,7 @@ def add_snippet_page(request):
             if request.user.is_authenticated:
                 snippet.user = request.user
                 snippet.save()
-            return redirect("snippets_list")
+            return redirect("snippets_list_my")
         return render(request,'pages/add_snippet.html',{'form': form, 'pagename': 'Надо исправить'})
     return HttpResponseNotAllowed(('GET','POST'))
 
@@ -106,4 +115,22 @@ def snippet_delete(request, id):
     if request.method != "POST":
         return render(request, 'pages/del_snippet.html', {'snippet': snippet})
     snippet.delete()
-    return redirect('snippets_list')
+    return redirect('snippets_list_my')
+
+
+def accounts_login(request):
+    if request.method == "GET":
+        context = {
+            'form': UserRegistrationForm(),
+            'pagename': 'Добавление нового пользователя'}
+        return render(request, "pages/login.html", context)
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect("home")
+        context = {
+            'form': form,
+            'pagename': 'Добавление нового пользователя - ошибка'}
+        return render(request, "pages/login.html", context)
