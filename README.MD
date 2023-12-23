@@ -12,3 +12,5 @@ run django-extensions console:
     user.is_staff = True
     u.set_password("passwd")
     user.save()
+
+https://django.fun/docs/django/4.2/ref/models/fields/#django.db.models.ForeignKey.related_name
