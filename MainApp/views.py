@@ -7,8 +7,27 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
 
+def accounts_register(request):
+    if request.method == "GET":
+        context = {
+            'form': UserRegistrationForm(),
+            'pagename': 'Добавление нового пользователя'}
+        return render(request, "pages/user_register.html", context)
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect("home")
+        context = {
+            'form': form,
+            'pagename': 'Добавление нового пользователя - ошибка'}
+        return render(request, "pages/user_register.html", context)
+
 
 def login(request):
+    if request.method == 'GET':
+        return render(request, 'pages/login.html', {})
     if request.method == 'POST':
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -22,7 +41,8 @@ def login(request):
             return render(request, 'pages/index.html', context)
             #pass
     to = request.META.get('HTTP_REFERER', '/')
-    if not to.endswith('/login'):
+    print(f'{to=}')
+    if not '/login' in to:
         return redirect(to)
     else:
         return redirect('home')
@@ -118,19 +138,3 @@ def snippet_delete(request, id):
     return redirect('snippets_list_my')
 
 
-def accounts_login(request):
-    if request.method == "GET":
-        context = {
-            'form': UserRegistrationForm(),
-            'pagename': 'Добавление нового пользователя'}
-        return render(request, "pages/login.html", context)
-    if request.method == "POST":
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            return redirect("home")
-        context = {
-            'form': form,
-            'pagename': 'Добавление нового пользователя - ошибка'}
-        return render(request, "pages/login.html", context)

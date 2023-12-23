@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Begin page content -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{ pagename }}</h1>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <form action="{% url 'accounts_register' %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="form-group row">
+                        <div class="col-8">
+                            <input type="submit" class="btn btn-primary btn-block" value="Создать пользователя">
+                            <a href="{% url 'login' %}" class="btn btn-secondary btn-block">Уже есть пользователь</a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

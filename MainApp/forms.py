@@ -14,6 +14,7 @@ class SnippetForm(ModelForm):
             'name': TextInput(attrs={
                 "class":       "form-control form-control-lg",
                 'placeholder': 'Название сниппета'}),
+
         }
         labels = {
             'name': 'Название',
@@ -24,23 +25,29 @@ class SnippetForm(ModelForm):
 
 
 class UserRegistrationForm(ModelForm):
-   class Meta:
-       model = User
-       fields = ["username", "email"]
+    class Meta:
+        model = User
+        fields = ["username", "email"]
 
-   password1 = CharField(label="password", widget=PasswordInput)
-   password2 = CharField(label="password confirm", widget=PasswordInput)
+    password1 = CharField(label="password", widget=PasswordInput)
+    password2 = CharField(label="password confirm", widget=PasswordInput)
 
-   def clean_password2(self):
-       pass1 = self.cleaned_data.get("password1")
-       pass2 = self.cleaned_data.get("password2")
-       if pass1 and pass2 and pass1 == pass2:
-           return pass2
-       raise ValidationError("Пароли не совпадают или пустые")
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if len(username)>3:
+            return username
+        raise ValidationError("Too short username")
 
-   def save(self, commit=True):
-       user = super().save(commit=False)
-       user.set_password(self.cleaned_data["password1"])
-       if commit:
-           user.save()
-       return user
+    def clean_password2(self):
+        pass1 = self.cleaned_data.get("password1")
+        pass2 = self.cleaned_data.get("password2")
+        if pass1 and pass2 and pass1 == pass2:
+            return pass2
+        raise ValidationError("Пароли не совпадают или пустые")
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
