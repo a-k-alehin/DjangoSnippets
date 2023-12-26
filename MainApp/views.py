@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from MainApp.models import Snippet, Comment
 from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -117,8 +117,9 @@ def snippet_edit_page(request, id):
             snippet.code=request.POST.get('code',snippet.code)
             snippet.is_public=request.POST.get('is_public', False)  #(request.POST.get('is_public',"") == 'on')
             snippet.save()
+            messages.success(request, 'Сохранено')
             return redirect(f'/snippet/{id}')
-        context['pagename'] = 'Надо исправить'
+        messages.error(request, 'Надо исправить')
         return render(request, 'pages/detail_snippet.html', context)
     return HttpResponseNotAllowed(('GET','POST'))
 
