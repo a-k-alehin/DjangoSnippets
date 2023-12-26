@@ -36,11 +36,7 @@
 {% if can_edit %}
                                 <textarea name="code" cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
 {% else %}
-                                <pre>
-                                {% autoescape off %}
-                                    {{ snippet.code|escape|br }}
-                                {% endautoescape %}
-                                </pre>
+                                <pre>{% autoescape off %}{{ snippet.code|escape }}{% endautoescape %}</pre>
 {% endif %}
                             </div>
                         </div>
@@ -69,5 +65,42 @@
 
             </form>
         </div></div>
+{% if not can_edit %}
+        <hr>
+        <div class="row">
+            <div class="col">
+                <table border="1" class="table table-striped">
+{% if comments %}
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Автор</th>
+                            <th>Дата</th>
+                            <th>Комментарий</th>
+                        </tr>
+                    </thead>
+{% endif %}
+                    <tbody>
+                    {% for comment in comments %}
+                    <tr>
+                        <td>{{comment.author.username}}</td>
+                        <td>{{comment.creation_date}}</td>
+                        <td>{{comment.text}}</td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                 </table>
+                <div class="form-group row">
+                    <div class="offset-4 col-4">
+                        <form action="{% url 'comment_add' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="snippet_id" value="{{ snippet.id }}">
+                            {{comment_form.as_p}}
+                            <button type="submit">Добавить комментарий</button>
+                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endif %}
     </div>
 {% endblock %}

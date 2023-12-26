@@ -1,10 +1,11 @@
 from django.http import Http404, HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from MainApp.models import Snippet
-from MainApp.forms import SnippetForm, UserRegistrationForm
+from MainApp.models import Snippet, Comment
+from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def accounts_register(request):
@@ -59,24 +60,41 @@ def index_page(request):
     return render(request, 'pages/index.html', context)
 
 
-def snippets_page(request):
-    context = {"snippets": Snippet.objects.filter(is_public=True), 'pagename': 'Просмотр сниппетов'}
+def snippets_page_(request, my):
+    pagename='Просмотр сниппетов'
+    if my:
+        snippets=Snippet.objects.filter(user=request.user)
+        pagename='Просмотр моих сниппетов'
+    elif request.user.is_authenticated:
+        snippets=Snippet.objects.filter(Q(is_public=True) | Q(user=request.user))
+    else:
+        snippets=Snippet.objects.filter(is_public=True)
+    context = {"snippets": snippets, 'pagename': pagename}
     return render(request, 'pages/view_snippets.html', context)
 
 
 @login_required
+def snippets_page(request):
+    return snippets_page_(request, False)
+
+
+@login_required
 def snippets_my_page(request):
-    context = {"snippets": Snippet.objects.filter(user=request.user), 'pagename': 'Просмотр моих сниппетов'}
-    return render(request, 'pages/view_snippets.html', context)
+    return snippets_page_(request, True)
 
 
 def snippet_detail_page(request, id):
     if request.method == "GET":
         try:
             snippet = Snippet.objects.get(id=id)
+            comments = Comment.objects.filter(snippet=snippet).order_by('creation_date')
         except ObjectDoesNotExist:
             return HttpResponseNotFound(f'Сниппет с id={id} не найден')
-        context = {"snippet": snippet, "can_edit": False}
+        context = {
+            "snippet": snippet,
+            "comments": comments,
+            "comment_form": CommentForm,
+            "can_edit": False}
         return render(request, "pages/detail_snippet.html", context)
     return HttpResponseNotAllowed(('GET',))
 
@@ -99,7 +117,7 @@ def snippet_edit_page(request, id):
             snippet.code=request.POST.get('code',snippet.code)
             snippet.is_public=request.POST.get('is_public', False)  #(request.POST.get('is_public',"") == 'on')
             snippet.save()
-            return redirect("snippets_list_my")
+            return redirect(f'/snippet/{id}')
         context['pagename'] = 'Надо исправить'
         return render(request, 'pages/detail_snippet.html', context)
     return HttpResponseNotAllowed(('GET','POST'))
@@ -138,3 +156,18 @@ def snippet_delete(request, id):
     return redirect('snippets_list_my')
 
 
+@login_required
+def comment_add(request):
+    if request.method == "POST":
+        try:
+            snippet_id = request.POST.get('snippet_id')
+        except ObjectDoesNotExist:
+            raise Http404
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.snippet = Snippet.objects.get(id=snippet_id)
+            comment.save()
+        return redirect(f'/snippet/{snippet_id}')
+    raise Http404
