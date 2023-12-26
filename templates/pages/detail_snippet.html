@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 {% block content %}
 <!-- Begin page content -->
     <div class="container">
@@ -35,7 +36,11 @@
 {% if can_edit %}
                                 <textarea name="code" cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
 {% else %}
-                                <pre>{{ snippet.code }}</pre>
+                                <pre>
+                                {% autoescape off %}
+                                    {{ snippet.code|escape|br }}
+                                {% endautoescape %}
+                                </pre>
 {% endif %}
                             </div>
                         </div>

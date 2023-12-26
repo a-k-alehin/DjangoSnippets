@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 {% block content %}
 <!-- Begin page content -->
     <div class="container">
@@ -31,7 +32,7 @@
                         <td>{{snp.lang}}</td>
                         <td>{{snp.creation_date}}</td>
                         <td>{% if snp.is_public %} Да {% endif %}</td>
-                        <td>{{snp.user.username}}</td>
+                        <td>{{snp.user.username|is_empty:"аноним"}}</td>
                         <td>
 {% if snp.user == request.user %}
                             <a class="btn btn-danger" href="{% url 'snippet_delete' snp.id %}">x</a>
