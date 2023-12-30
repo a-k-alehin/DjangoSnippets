@@ -73,7 +73,6 @@ def snippets_page_(request, my):
     return render(request, 'pages/view_snippets.html', context)
 
 
-@login_required
 def snippets_page(request):
     return snippets_page_(request, False)
 
