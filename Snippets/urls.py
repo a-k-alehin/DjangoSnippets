@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from MainApp import views
+from django.contrib import admin
 
 urlpatterns = [
     path('', views.index_page, name='home'),
@@ -15,4 +16,5 @@ urlpatterns = [
     path('accounts/login/', views.login, name='login'),
     path('accounts/logout', views.logout, name='logout'),
     path('comment/add', views.comment_add, name="comment_add"),
+    path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

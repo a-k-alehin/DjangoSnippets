@@ -16,10 +16,19 @@ class Snippet(models.Model):
     is_public = models.BooleanField(default=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=True, null=True)
 
+    def __repr__(self):
+        return f'{self.name} {self.lang}'
+    def __str__(self):
+        return repr(self)
+
 
 class Comment(models.Model):
-   text = models.TextField(max_length=1000)
-   creation_date = models.DateTimeField(auto_now=True)
-   author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-   snippet = models.ForeignKey(to=Snippet, on_delete=models.CASCADE, related_name="comments")
+    text = models.TextField(max_length=1000)
+    creation_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    snippet = models.ForeignKey(to=Snippet, on_delete=models.CASCADE, related_name="comments")
 
+    def __repr__(self):
+        return f'{self.author} {self.creation_date} {self.snippet}'
+    def __str__(self):
+        return repr(self)
