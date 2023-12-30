@@ -50,7 +50,7 @@
                     <tr>
                         <td scope="row">{{snp.id}}</td>
                         <td><a href="{% url 'snippet_detail' snp.id %}">{{snp.name}}</a></td>
-                        <td>{{snp.lang}}</td>
+                        <td>{{snp.lang}} -> {{snp.language}}</td>
                         <td>{{snp.creation_date}}</td>
                         <td>{% if snp.is_public %} Да {% endif %}</td>
                         <td>{{snp.user.username|is_empty:"аноним"}}</td>

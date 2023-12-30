@@ -8,6 +8,16 @@ LANGS = (
 )
 
 
+class Language(models.Model):
+    shortname = models.CharField(max_length=10)
+    fullname =  models.CharField(max_length=50)
+
+    def __repr__(self):
+        return f'{self.shortname}'
+    def __str__(self):
+        return repr(self)
+
+
 class Snippet(models.Model):
     name = models.CharField(max_length=100)
     lang = models.CharField(max_length=30, choices=LANGS)
@@ -15,9 +25,10 @@ class Snippet(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField(default=True)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=True, null=True)
+    language = models.ForeignKey(to=Language, on_delete=models.PROTECT, blank=True, null=True)
 
     def __repr__(self):
-        return f'{self.name} {self.lang}'
+        return f'{self.name} {self.language}'
     def __str__(self):
         return repr(self)
 

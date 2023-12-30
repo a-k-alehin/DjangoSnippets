@@ -71,9 +71,9 @@ def snippets_page_(request, my):
         snippets=Snippet.objects.filter(is_public=True)
     lang=request.GET.get("lang")
     if lang:
-        snippets=snippets.filter(lang=lang)
+        snippets=snippets.filter(language__shortname=lang)
     snippets=snippets.order_by("name")
-    context = {"snippets": snippets, 'pagename': pagename, 'count': snippets.count()}
+    context = {"snippets": snippets, 'pagename': pagename, 'count': snippets.count(), "lang": lang}
     return render(request, 'pages/view_snippets.html', context)
 
 
@@ -117,7 +117,7 @@ def snippet_edit_page(request, id):
         form = SnippetForm(request.POST)
         if form.is_valid():
             snippet.name=request.POST.get('name',snippet.name)
-            snippet.lang=request.POST.get('lang',snippet.lang)
+            snippet.language=request.POST.get('language',snippet.language)
             snippet.code=request.POST.get('code',snippet.code)
             snippet.is_public=request.POST.get('is_public', False)  #(request.POST.get('is_public',"") == 'on')
             snippet.save()
