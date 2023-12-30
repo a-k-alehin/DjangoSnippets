@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load pygmentify_tags %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% pygmentify_css %}">
+{% endblock style %}
+
 {% load my_tags %}
 {% block content %}
 <!-- Begin page content -->
@@ -36,7 +42,7 @@
 {% if can_edit %}
                                 <textarea name="code" cols="96" rows="10" placeholder="Код сниппета">{{ snippet.code }}</textarea>
 {% else %}
-                                <pre>{% autoescape off %}{{ snippet.code|escape }}{% endautoescape %}</pre>
+                                {% pygmentify %}<pre class="python"> {% autoescape off %}{{ snippet.code|escape }}{% endautoescape %}</pre>{% endpygmentify %}
 {% endif %}
                             </div>
                         </div>
@@ -68,18 +74,16 @@
 {% if not can_edit %}
         <hr>
         <div class="row">
-            <div class="col">
-                <table border="1" class="table table-striped">
-{% if comments %}
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Автор</th>
-                            <th>Дата</th>
-                            <th>Комментарий</th>
-                        </tr>
-                    </thead>
-{% endif %}
+            <div class="offset-2 col-8">
+                <table border="1" class="table table-striped table-light">
                     <tbody>
+{% if comments %}
+                    <tr class="table-info">
+                        <th>Автор</th>
+                        <th>Дата</th>
+                        <th>Комментарий</th>
+                    </tr>
+{% endif %}
                     {% for comment in comments %}
                     <tr>
                         <td>{{comment.author.username}}</td>
