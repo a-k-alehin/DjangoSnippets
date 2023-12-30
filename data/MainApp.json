@@ -6,7 +6,9 @@
         "name": "Hello world Snippet",
         "lang": "",
         "code": "print(\"Hello world\")",
-        "creation_date": "2023-12-16T11:51:37.547Z"
+        "creation_date": "2023-12-16T11:51:37.547Z",
+        "is_public": true,
+        "user": null
     }
 },
 {
@@ -16,7 +18,9 @@
         "name": "Hello world Snippet - 2",
         "lang": "",
         "code": "print(\"Hello world - 2\")",
-        "creation_date": "2023-12-16T11:52:49.073Z"
+        "creation_date": "2023-12-16T11:52:49.073Z",
+        "is_public": true,
+        "user": null
     }
 },
 {
@@ -26,7 +30,147 @@
         "name": "123",
         "lang": "pascal",
         "code": "1223",
-        "creation_date": "2023-12-16T13:32:42.289Z"
+        "creation_date": "2023-12-16T13:32:42.289Z",
+        "is_public": true,
+        "user": null
+    }
+},
+{
+    "model": "MainApp.snippet",
+    "pk": 4,
+    "fields": {
+        "name": "my (admin)",
+        "lang": "py",
+        "code": "wefwefwef",
+        "creation_date": "2023-12-23T13:05:52.201Z",
+        "is_public": true,
+        "user": 1
+    }
+},
+{
+    "model": "MainApp.snippet",
+    "pk": 5,
+    "fields": {
+        "name": "wefwef",
+        "lang": "js",
+        "code": "wefwefwefs",
+        "creation_date": "2023-12-30T06:56:50.422Z",
+        "is_public": false,
+        "user": 1
+    }
+},
+{
+    "model": "MainApp.snippet",
+    "pk": 6,
+    "fields": {
+        "name": "user",
+        "lang": "py",
+        "code": "p=123123123\r\nprint(p)",
+        "creation_date": "2023-12-30T09:54:56.330Z",
+        "is_public": true,
+        "user": 2
+    }
+},
+{
+    "model": "MainApp.snippet",
+    "pk": 7,
+    "fields": {
+        "name": "u2ww",
+        "lang": "cpp",
+        "code": "werwer\r\nqwdqwd",
+        "creation_date": "2023-12-30T09:37:48.650Z",
+        "is_public": true,
+        "user": 2
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 1,
+    "fields": {
+        "text": "!!!!",
+        "creation_date": "2023-12-30T06:55:42.771Z",
+        "author": 1,
+        "snippet": 6
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 2,
+    "fields": {
+        "text": "12334567",
+        "creation_date": "2023-12-30T06:55:51.225Z",
+        "author": 1,
+        "snippet": 6
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 3,
+    "fields": {
+        "text": "fdbdfbdfbdfb",
+        "creation_date": "2023-12-30T07:15:09.893Z",
+        "author": 1,
+        "snippet": 5
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 4,
+    "fields": {
+        "text": "hrthrthrth",
+        "creation_date": "2023-12-30T07:29:03.921Z",
+        "author": 2,
+        "snippet": 4
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 5,
+    "fields": {
+        "text": "sd",
+        "creation_date": "2023-12-30T09:19:48.759Z",
+        "author": 2,
+        "snippet": 6
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 6,
+    "fields": {
+        "text": "sd",
+        "creation_date": "2023-12-30T09:20:14.030Z",
+        "author": 2,
+        "snippet": 6
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 7,
+    "fields": {
+        "text": "eee",
+        "creation_date": "2023-12-30T09:20:47.596Z",
+        "author": 2,
+        "snippet": 6
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 8,
+    "fields": {
+        "text": "fghrfhr",
+        "creation_date": "2023-12-30T09:37:28.878Z",
+        "author": 2,
+        "snippet": 1
+    }
+},
+{
+    "model": "MainApp.comment",
+    "pk": 9,
+    "fields": {
+        "text": "tyjtyj",
+        "creation_date": "2023-12-30T09:37:42.780Z",
+        "author": 2,
+        "snippet": 7
     }
 }
 ]
