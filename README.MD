@@ -14,3 +14,7 @@ run django-extensions console:
     user.save()
 
 https://django.fun/docs/django/4.2/ref/models/fields/#django.db.models.ForeignKey.related_name
+
+
+    ipython
+    bpython
