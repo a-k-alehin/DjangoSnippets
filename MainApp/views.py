@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponseNotFound, HttpResponseNotAllowed
+from django.http import Http404, HttpResponseNotFound, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from MainApp.models import Snippet, Comment
@@ -86,7 +86,8 @@ def snippet_detail_page(request, id):
     if request.method == "GET":
         try:
             snippet = Snippet.objects.get(id=id)
-            comments = Comment.objects.filter(snippet=snippet).order_by('creation_date')
+            #comments = Comment.objects.filter(snippet=snippet).order_by('creation_date')
+            comments = snippet.comments.all()
         except ObjectDoesNotExist:
             return HttpResponseNotFound(f'Сниппет с id={id} не найден')
         context = {
@@ -116,8 +117,9 @@ def snippet_edit_page(request, id):
             snippet.code=request.POST.get('code',snippet.code)
             snippet.is_public=request.POST.get('is_public', False)  #(request.POST.get('is_public',"") == 'on')
             snippet.save()
-            messages.success(request, 'Сохранено')
-            return redirect(f'/snippet/{id}')
+            messages.add_message(request, messages.SUCCESS, 'Сохранено')
+            #messages.success(request, 'Сохранено')
+            return redirect('snippet_detail', id)
         messages.error(request, 'Надо исправить')
         return render(request, 'pages/detail_snippet.html', context)
     return HttpResponseNotAllowed(('GET','POST'))
@@ -169,5 +171,6 @@ def comment_add(request):
             comment.author = request.user
             comment.snippet = Snippet.objects.get(id=snippet_id)
             comment.save()
-        return redirect(f'/snippet/{snippet_id}')
+        #return redirect('snippet_detail', snippet_id)
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
     raise Http404

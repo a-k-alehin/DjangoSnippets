@@ -34,16 +34,7 @@
 
 {% include 'inc/inc-header.html' %}
 
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li class="{{ message.tags }}">
-                {{ message|safe }}
-                <a href="#" class="close">✖</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+{% include 'inc/messages.html' %}
 
 <!-- Begin page content -->
 <main role="main" class="mt-3 flex-shrink-0">
