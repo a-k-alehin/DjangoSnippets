@@ -12,6 +12,27 @@
 
         <div class="row">
             <div class="col">
+                <form action='' method="get">
+                    <div class="form-group row">
+
+                        <div class="offset-sm-8 col-sm-2">
+                            <label for="lang_id">Язык:</label>
+                            <select name="lang" id="lang_id">
+                                <option {% if lang == 'py'  %} selected {% endif %} value="py">Python</option>
+                                <option {% if lang == 'js'  %} selected {% endif %} value="js">JavaScript</option>
+                                <option {% if lang == 'cpp' %} selected {% endif %} value="cpp">C++</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="submit" class="form-control form-control-lg btn btn-info" value="Найти">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
                 <table class="table table-striped">
                     <thead class="thead-dark">
                     <tr>
